@@ -87,6 +87,13 @@ tasksMeta/latest          // 最終更新時刻の1ドキュメント
 - Tailwind CSS 3
 - GitHub Pages（GitHub Actions によるデプロイ）
 
-## 既知の制限
+## PWA アイコン
 
-- PWA アイコンは `public/favicon.svg`（SVGのみ）で用意している。ラスタ画像（PNG）は生成環境の制約により未生成。iOS の `apple-touch-icon` など、SVGアイコンに対応しないコンテキストでは表示が欠ける可能性がある。PNGが必要な場合は別途用意すること。
+`public/favicon.svg`（紺地に金のサメ、ベクター）に加えて、`scripts/generate-icons.mjs`（`sharp` 使用）で以下の PNG を生成し、リポジトリにコミットしている。
+
+- `public/pwa-192.png`（192×192, purpose: any）
+- `public/pwa-512.png`（512×512, purpose: any）
+- `public/pwa-maskable-512.png`（512×512, purpose: maskable。Android のアダプティブアイコンによる外周トリミングに備え、サメを中央のセーフゾーンに収まるよう縮小配置している）
+- `public/apple-touch-icon.png`（180×180）
+
+**アイコンの意匠（サメの形・金色）を変更する場合は、`public/favicon.svg` と `scripts/generate-icons.mjs` 内の `SHARK_SHAPE`（同じポリゴン座標を複製保持している）の両方を揃えて更新したうえで、`npm run icons` を実行し PNG を再生成すること。**（両者を分けている理由は `scripts/generate-icons.mjs` 冒頭のコメントを参照。favicon.svg はブラウザタブ用で角丸背景・背景色が異なるため、PNG生成用に独立した定義を持たせている。）`sharp` は devDependency なので、通常のビルド（`npm run build`）には含まれない。
