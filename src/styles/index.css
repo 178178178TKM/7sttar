@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * 配色トークンはモック (memo-feed-mock.html) の :root / prefers-color-scheme /
+ * [data-theme] をそのまま移植したもの。値は一切変更していない。
+ * Tailwind 側 (tailwind.config.js) はこれらの CSS 変数を参照するだけにして
+ * あるので、ライト/ダーク自動切替と data-theme による明示的な上書きの両方が
+ * そのまま機能する。
+ */
+:root {
+  --bg-base: #E8E2D2;
+  --bg-surface: #F4F0E4;
+  --bg-card: #FBF8EF;
+  --bg-hover: #EDE7D8;
+  --text-primary: #16233A;
+  --text-muted: #5C6577;
+  --border: #D6CEB8;
+  --accent: #9A7B15;
+  --accent-contrast: #FFFFFF;
+  --shadow-card: 0 1px 3px rgba(15, 20, 25, 0.08);
+  --danger: #A2564C;
+  --danger-bg: rgba(162, 86, 76, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-base: #0B1420;
+    --bg-surface: #121E2E;
+    --bg-card: #16233A;
+    --bg-hover: #1D2C45;
+    --text-primary: #EDE6D3;
+    --text-muted: #8B94A5;
+    --border: #26354B;
+    --accent: #C9A227;
+    --accent-contrast: #0B1420;
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --danger: #A2564C;
+    --danger-bg: rgba(162, 86, 76, 0.14);
+  }
+}
+
+:root[data-theme='light'] {
+  --bg-base: #E8E2D2;
+  --bg-surface: #F4F0E4;
+  --bg-card: #FBF8EF;
+  --bg-hover: #EDE7D8;
+  --text-primary: #16233A;
+  --text-muted: #5C6577;
+  --border: #D6CEB8;
+  --accent: #9A7B15;
+  --accent-contrast: #FFFFFF;
+  --shadow-card: 0 1px 3px rgba(15, 20, 25, 0.08);
+  --danger: #A2564C;
+  --danger-bg: rgba(162, 86, 76, 0.14);
+}
+
+:root[data-theme='dark'] {
+  --bg-base: #0B1420;
+  --bg-surface: #121E2E;
+  --bg-card: #16233A;
+  --bg-hover: #1D2C45;
+  --text-primary: #EDE6D3;
+  --text-muted: #8B94A5;
+  --border: #26354B;
+  --accent: #C9A227;
+  --accent-contrast: #0B1420;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --danger: #A2564C;
+  --danger-bg: rgba(162, 86, 76, 0.14);
+}
+
+a:focus-visible,
+button:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

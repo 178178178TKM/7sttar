@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 紺地に金のサメ。モック (memo-feed-mock.html) の app-shark-logo の
+       12点ポリゴン＋目を、64x64の正方形アイコンにスケールして再配置したもの。 -->
+  <rect x="0" y="0" width="64" height="64" rx="10" fill="#16233A" />
+  <g transform="translate(6.4,20.8) scale(0.8)">
+    <polygon points="2,14 10,8 18,0 24,8 46,10 62,2 52,14 62,22 46,18 20,22 14,28 10,20" fill="#C9A227" />
+    <circle cx="9" cy="12" r="1.4" fill="#16233A" />
+  </g>
+</svg>

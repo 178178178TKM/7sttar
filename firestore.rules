@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// 7sttar の Security Rules。
+//
+// - memos / tasks は owner フィールド（Firebase Auth の uid）を持つので、
+//   「読み書きともに request.auth.uid == resource.data.owner のときのみ許可」
+//   「新規作成は request.resource.data.owner == request.auth.uid のときのみ許可」
+//   という、指示された生成パターンをそのまま適用している。
+// - tasksMeta/latest はデータモデル上 owner フィールドを持たない単一ドキュメント
+//   なので、owner ベースの判定ができない。代わりに OWNER_UID を直接指定する。
+//   Firebase プロジェクトはまだ存在しないため実際のUIDは不明。
+//   Firebase プロジェクト作成後、Authentication タブで（Googleでサインインした）
+//   本人のUIDを確認し、下記 OWNER_UID の値を実際のUIDに置き換えてから
+//   デプロイすること。プレースホルダのままでは誰のUIDにもマッチしないため、
+//   安全側（読み書き不可）にフォールバックする。
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwnerUid(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // TODO: Firebase プロジェクト作成後、実際のUIDに置き換える。
+    // 確認場所: Firebase コンソール → Authentication → Users → UID列
+    function isTheOwner() {
+      return isOwnerUid('REPLACE_WITH_OWNER_UID');
+    }
+
+    match /memos/{memoId} {
+      allow read, update, delete:
+        if request.auth != null && request.auth.uid == resource.data.owner;
+      allow create:
+        if request.auth != null && request.resource.data.owner == request.auth.uid;
+    }
+
+    // アプリからは読み取りのみ行う（クライアントコードに書き込み処理は実装しない）。
+    // ルール上は memos と同じ owner ベースの読み書き許可としておき、
+    // PC側の取り込みプロセスが同一Googleアカウントのクライアント経由で
+    // 書き込む運用にも対応できるようにしてある。
+    match /tasks/{taskId} {
+      allow read:
+        if request.auth != null && request.auth.uid == resource.data.owner;
+      allow create:
+        if request.auth != null && request.resource.data.owner == request.auth.uid;
+      allow update, delete:
+        if request.auth != null && request.auth.uid == resource.data.owner;
+    }
+
+    match /tasksMeta/latest {
+      allow read, write: if isTheOwner();
+    }
+  }
+}

@@ -1,0 +1,16 @@
+node_modules
+dist
+
+# 環境変数（Firebase設定値などを含む）
+.env
+.env.local
+.env.*.local
+*.local
+
+# サービスアカウント鍵・認証情報らしきファイルは誤コミット防止のため
+# パターンで一括除外する（ファイル名に serviceAccount / credentials /
+# firebase-adminsdk を含む JSON ファイル）
+*serviceAccount*.json
+*service-account*.json
+*credentials*.json
+*firebase-adminsdk*.json

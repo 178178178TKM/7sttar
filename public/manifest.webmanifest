@@ -1,0 +1,19 @@
+{
+  "name": "7sttar",
+  "short_name": "7sttar",
+  "description": "投入口 & 残タスク確認",
+  "start_url": "/7sttar/",
+  "scope": "/7sttar/",
+  "display": "standalone",
+  "background_color": "#E8E2D2",
+  "theme_color": "#E8E2D2",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/7sttar/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
