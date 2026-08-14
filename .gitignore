@@ -14,3 +14,10 @@ dist
 *service-account*.json
 *credentials*.json
 *firebase-adminsdk*.json
+
+# Firebase Local Emulator Suite
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+*-debug.log
+.firebase/

@@ -16,7 +16,13 @@ const TABS = [
 ];
 
 export default function App() {
-  const { user, loading: authLoading, signIn, error: authError } = useAuth();
+  const {
+    user,
+    loading: authLoading,
+    signIn,
+    signInAsEmulatorTestUser,
+    error: authError,
+  } = useAuth();
 
   if (authLoading) {
     return (
@@ -27,7 +33,13 @@ export default function App() {
   }
 
   if (!user) {
-    return <LoginScreen onSignIn={signIn} error={authError} />;
+    return (
+      <LoginScreen
+        onSignIn={signIn}
+        onSignInEmulator={signInAsEmulatorTestUser}
+        error={authError}
+      />
+    );
   }
 
   return <AuthedApp uid={user.uid} />;

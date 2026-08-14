@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "node scripts/generate-icons.mjs",
+    "emulators": "firebase emulators:start --project demo-7sttar",
+    "seed:emulator": "node scripts/seed-emulator.mjs",
+    "dev:local": "concurrently -n emulators,vite -c yellow,cyan \"npm:emulators\" \"npm:dev\""
   },
   "dependencies": {
     "firebase": "^12.13.0",
@@ -21,10 +24,13 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.5.0",
+    "concurrently": "^10.0.4",
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
+    "firebase-admin": "^14.2.0",
+    "firebase-tools": "^15.27.0",
     "globals": "^15.11.0",
     "postcss": "^8.5.15",
     "sharp": "^0.35.3",

@@ -13,6 +13,17 @@ rules_version = '2';
 //   本人のUIDを確認し、下記 OWNER_UID の値を実際のUIDに置き換えてから
 //   デプロイすること。プレースホルダのままでは誰のUIDにもマッチしないため、
 //   安全側（読み書き不可）にフォールバックする。
+//
+//   【Firebase Local Emulator Suite での扱い】
+//   このファイルはエミュレータでもそのまま（フォークせず）使う。
+//   src/lib/emulatorTestUser.js の EMULATOR_TEST_UID を、下のプレースホルダと
+//   意図的に同じ文字列 'REPLACE_WITH_OWNER_UID' にしてあり、
+//   scripts/seed-emulator.mjs が Auth エミュレータにその文字列そのものをUIDと
+//   するテストユーザーを作成する。そのため tasksMeta/latest のルールも
+//   フォークなしでローカル検証できる。本番デプロイ時にここを実際のUIDへ
+//   置き換えたら、emulatorTestUser.js 側の値も揃えて更新すること
+//   （揃えない場合、ローカルエミュレータでの tasksMeta/latest 検証だけができ
+//   なくなる。memos/tasks の owner ベースの検証には影響しない）。
 service cloud.firestore {
   match /databases/{database}/documents {
 
