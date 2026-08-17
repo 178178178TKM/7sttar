@@ -1,8 +1,21 @@
 // src/components/MemoFeed.jsx
+import { useEffect } from 'react';
 import { Composer } from './Composer.jsx';
 import { MemoCard } from './MemoCard.jsx';
 
-export function MemoFeed({ memos, loading, onPost }) {
+export function MemoFeed({ memos, loading, onPost, initialText, onInitialTextConsumed }) {
+  // 共有経由の初期テキスト（initialText）は、Composerの初期値として一度使われたら
+  // 「使用済み」として親に伝える。これにより、タブ切り替えでこのコンポーネントが
+  // アンマウント→再マウントされても、同じ共有テキストが再びComposerに差し込まれて
+  // 編集中の下書きを消してしまうことがなくなる。
+  // （initialTextが空になった後にもう一度この副作用は走るが、ガードにより何もしない。
+  //   タブ切り替え時の下書き保持そのものの挙動には手を入れていない。）
+  useEffect(() => {
+    if (initialText && onInitialTextConsumed) {
+      onInitialTextConsumed();
+    }
+  }, [initialText, onInitialTextConsumed]);
+
   return (
     <section
       id="panel-memo"
@@ -11,7 +24,7 @@ export function MemoFeed({ memos, loading, onPost }) {
       aria-labelledby="tab-memo"
       tabIndex={0}
     >
-      <Composer onPost={onPost} />
+      <Composer onPost={onPost} initialText={initialText} />
 
       {loading ? (
         <p className="px-1 py-6 text-center text-sm text-text-muted">読み込み中…</p>

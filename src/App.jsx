@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useAuth } from './hooks/useAuth.js';
 import { useMemos, postMemo } from './hooks/useMemos.js';
 import { useTasks, useTasksMeta } from './hooks/useTasks.js';
+import { useShareTargetText } from './hooks/useShareTarget.js';
 import { SharkLogo } from './components/SharkLogo.jsx';
 import { ThemeToggle } from './components/ThemeToggle.jsx';
 import { Tabs } from './components/Tabs.jsx';
@@ -23,6 +24,7 @@ export default function App() {
     signInAsEmulatorTestUser,
     error: authError,
   } = useAuth();
+  const [sharedText, consumeSharedText] = useShareTargetText();
 
   if (authLoading) {
     return (
@@ -42,10 +44,16 @@ export default function App() {
     );
   }
 
-  return <AuthedApp uid={user.uid} />;
+  return (
+    <AuthedApp
+      uid={user.uid}
+      sharedText={sharedText}
+      onSharedTextConsumed={consumeSharedText}
+    />
+  );
 }
 
-function AuthedApp({ uid }) {
+function AuthedApp({ uid, sharedText, onSharedTextConsumed }) {
   const [activeTab, setActiveTab] = useState('memo');
   const { memos, loading: memosLoading } = useMemos(uid);
   const { tasks, loading: tasksLoading } = useTasks(uid);
@@ -73,6 +81,8 @@ function AuthedApp({ uid }) {
             memos={memos}
             loading={memosLoading}
             onPost={(text) => postMemo(uid, text)}
+            initialText={sharedText}
+            onInitialTextConsumed={onSharedTextConsumed}
           />
         )}
         {activeTab === 'task' && (

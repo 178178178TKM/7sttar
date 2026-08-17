@@ -1,8 +1,8 @@
 // src/components/Composer.jsx
 import { useState } from 'react';
 
-export function Composer({ onPost }) {
-  const [text, setText] = useState('');
+export function Composer({ onPost, initialText = '' }) {
+  const [text, setText] = useState(initialText);
   const [posting, setPosting] = useState(false);
 
   const trimmedEmpty = text.trim().length === 0;
