@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "demo-7sttar"
+    "default": "demo-7sttar",
+    "production": "sttar-c31ad"
   }
 }

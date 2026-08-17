@@ -8,20 +8,19 @@ rules_version = '2';
 //   という、指示された生成パターンをそのまま適用している。
 // - tasksMeta/latest はデータモデル上 owner フィールドを持たない単一ドキュメント
 //   なので、owner ベースの判定ができない。代わりに OWNER_UID を直接指定する。
-//   Firebase プロジェクトはまだ存在しないため実際のUIDは不明。
-//   Firebase プロジェクト作成後、Authentication タブで（Googleでサインインした）
-//   本人のUIDを確認し、下記 OWNER_UID の値を実際のUIDに置き換えてから
-//   デプロイすること。プレースホルダのままでは誰のUIDにもマッチしないため、
-//   安全側（読み書き不可）にフォールバックする。
+//   本番 Firebase プロジェクト（sttar-c31ad）の Authentication タブで確認した
+//   本人（awr17837@gmail.com / Google）のUIDを下記 isTheOwner() に設定済み。
+//   プレースホルダのままでは誰のUIDにもマッチせず、安全側（読み書き不可）に
+//   フォールバックする仕組みだったが、現在は実UIDに置き換え済み。
 //
 //   【Firebase Local Emulator Suite での扱い】
 //   このファイルはエミュレータでもそのまま（フォークせず）使う。
-//   src/lib/emulatorTestUser.js の EMULATOR_TEST_UID を、下のプレースホルダと
-//   意図的に同じ文字列 'REPLACE_WITH_OWNER_UID' にしてあり、
+//   src/lib/emulatorTestUser.js の EMULATOR_TEST_UID を、下の isTheOwner() が
+//   指定するUID（86QwIlJqwJTQtOT9jHznrumEGm72）と意図的に同じ値にしてあり、
 //   scripts/seed-emulator.mjs が Auth エミュレータにその文字列そのものをUIDと
 //   するテストユーザーを作成する。そのため tasksMeta/latest のルールも
-//   フォークなしでローカル検証できる。本番デプロイ時にここを実際のUIDへ
-//   置き換えたら、emulatorTestUser.js 側の値も揃えて更新すること
+//   フォークなしでローカル検証できる。今後 isTheOwner() のUIDを変更する
+//   場合は、emulatorTestUser.js 側の値も揃えて更新すること
 //   （揃えない場合、ローカルエミュレータでの tasksMeta/latest 検証だけができ
 //   なくなる。memos/tasks の owner ベースの検証には影響しない）。
 service cloud.firestore {
@@ -31,17 +30,26 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == uid;
     }
 
-    // TODO: Firebase プロジェクト作成後、実際のUIDに置き換える。
     // 確認場所: Firebase コンソール → Authentication → Users → UID列
     function isTheOwner() {
-      return isOwnerUid('REPLACE_WITH_OWNER_UID');
+      return isOwnerUid('86QwIlJqwJTQtOT9jHznrumEGm72');
+    }
+
+    // update 時に、更新後のドキュメントでも owner が変更されていないことを
+    // 保証するヘルパー。これがないと、自分のドキュメントの owner を他人の
+    // UID に書き換えて手放す（実質的な譲渡）ことが理屈上可能になってしまう。
+    function ownerUnchanged() {
+      return request.resource.data.owner == resource.data.owner;
     }
 
     match /memos/{memoId} {
-      allow read, update, delete:
+      allow read, delete:
         if request.auth != null && request.auth.uid == resource.data.owner;
       allow create:
         if request.auth != null && request.resource.data.owner == request.auth.uid;
+      allow update:
+        if request.auth != null && request.auth.uid == resource.data.owner
+          && ownerUnchanged();
     }
 
     // アプリからは読み取りのみ行う（クライアントコードに書き込み処理は実装しない）。
@@ -53,7 +61,10 @@ service cloud.firestore {
         if request.auth != null && request.auth.uid == resource.data.owner;
       allow create:
         if request.auth != null && request.resource.data.owner == request.auth.uid;
-      allow update, delete:
+      allow update:
+        if request.auth != null && request.auth.uid == resource.data.owner
+          && ownerUnchanged();
+      allow delete:
         if request.auth != null && request.auth.uid == resource.data.owner;
     }
 
