@@ -1,0 +1,7 @@
+{
+  "_comment": "このファイルをコピーして scripts/import-config.local.json を作り、値をこのPC用に書き換えてください。import-config.local.json は .gitignore 対象なので、PCごとに個別に作成する必要があります（Git・Vaultのいずれ経由でも配布されません）。",
+  "_vaultInboxDir_comment": "このPCの Vault の 00_Inbox の絶対パス。必須（既定値なし。PCごとに異なるため）。",
+  "vaultInboxDir": "C:\\Users\\<username>\\Desktop\\脳\\myvaultt\\00_Inbox",
+  "_serviceAccountKeyPath_comment": "通常は省略してよい。省略時の既定値は %APPDATA%\\7sttar\\serviceAccount.json（椿がこの場所に配置する運用）。既定と異なる場所に鍵を置く場合のみ指定してください。",
+  "serviceAccountKeyPath": "C:\\Users\\<username>\\AppData\\Roaming\\7sttar\\serviceAccount.json"
+}

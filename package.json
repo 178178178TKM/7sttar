@@ -11,7 +11,10 @@
     "icons": "node scripts/generate-icons.mjs",
     "emulators": "firebase emulators:start --project demo-7sttar",
     "seed:emulator": "node scripts/seed-emulator.mjs",
-    "dev:local": "concurrently -n emulators,vite -c yellow,cyan \"npm:emulators\" \"npm:dev\""
+    "dev:local": "concurrently -n emulators,vite -c yellow,cyan \"npm:emulators\" \"npm:dev\"",
+    "import:memos": "node scripts/import-memos.mjs",
+    "import:memos:count": "node scripts/import-memos.mjs --count-only",
+    "test": "node --test"
   },
   "dependencies": {
     "firebase": "^12.13.0",

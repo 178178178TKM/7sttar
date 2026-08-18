@@ -15,6 +15,16 @@ dist
 *credentials*.json
 *firebase-adminsdk*.json
 
+# scripts/import-memos.mjs 用のPC固有ローカル設定
+# （鍵ファイルの絶対パス・Vaultの00_Inboxの絶対パスなど、PCごとに異なる値。
+# 設定例は scripts/import-config.local.example.json を参照）
+scripts/import-config.local.json
+
+# テスト実行ログ(検証エビデンスとしてローカルに残すが、リポジトリには
+# コミットしない。実行のたびに増える性質のファイルであり、機密は含まないが
+# 継続的にコミットする対象ではないため。2026-08-18、葦によるテスト実行ログ運用)
+test_logs/
+
 # Firebase Local Emulator Suite
 firebase-debug.log
 firestore-debug.log
